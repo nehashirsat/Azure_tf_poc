@@ -1,3 +1,16 @@
+/*locals {
+  custom_data = <<CUSTOM_DATA
+  #! /bin/bash
+  sudo apt update
+  sudo apt install python3-pip -y
+  git clone https://github.com/nehashirsat/linuxos.git
+  cd linuxos
+  pip3 install -r requirements.txt
+  sudo python3 app.py
+  CUSTOM_DATA
+  }
+*/
+
 resource "azurerm_virtual_machine" "vm" {
   name                  = "${var.prefix}-vm"
   location              = azurerm_resource_group.resource_group.location
@@ -27,6 +40,7 @@ resource "azurerm_virtual_machine" "vm" {
     computer_name  = "${var.prefix}-vm"
     admin_username = "adminuser"
     admin_password = "adminuser@123"
+    #custom_data = base64encode(local.custom_data)
     custom_data    = file("azure_user_data.sh")
   }
   os_profile_linux_config {
