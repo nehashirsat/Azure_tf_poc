@@ -14,7 +14,7 @@ resource "azurerm_virtual_machine" "vm" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "20.04-LTS"
+    sku       = "18.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
@@ -25,12 +25,25 @@ resource "azurerm_virtual_machine" "vm" {
   }
   os_profile {
     computer_name  = "${var.prefix}-vm"
-    admin_username = "admin"
-    admin_password = "admin@123"
+    admin_username = "adminuser"
+    admin_password = "adminuser@123"
+    custom_data    = file("azure_user_data.sh")
   }
   os_profile_linux_config {
     disable_password_authentication = false
   }
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "azurerm_public_ip" "public_ip" {
+  depends_on=[azurerm_resource_group.resource_group]
+  name                = "${var.prefix}-vm-public_ip"
+  resource_group_name = azurerm_resource_group.resource_group.name
+  location            = azurerm_resource_group.resource_group.location
+  allocation_method   = "Dynamic"
+  sku = "Basic"
   tags = {
     environment = var.environment
   }
