@@ -13,7 +13,7 @@ resource "azurerm_subnet" "internal" {
 }
 
 resource "azurerm_network_interface" "main" {
-  depends_on=[azurerm_public_ip.public_ip]
+  #depends_on=[azurerm_public_ip.public_ip]
   name                = "${var.prefix}-network_interface"
   location            = azurerm_resource_group.resource_group.location
   resource_group_name = azurerm_resource_group.resource_group.name
@@ -22,7 +22,7 @@ resource "azurerm_network_interface" "main" {
     name                          = "testconfiguration1"
     subnet_id                     = azurerm_subnet.internal.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id = azurerm_public_ip.public_ip.id
+    public_ip_address_id = azurerm_public_ip.linux_vm_public_ip.id
   }
 }
 

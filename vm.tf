@@ -1,17 +1,4 @@
-/*locals {
-  custom_data = <<CUSTOM_DATA
-  #! /bin/bash
-  sudo apt update
-  sudo apt install python3-pip -y
-  git clone https://github.com/nehashirsat/linuxos.git
-  cd linuxos
-  pip3 install -r requirements.txt
-  sudo python3 app.py
-  CUSTOM_DATA
-  }
-*/
-
-resource "azurerm_virtual_machine" "vm" {
+  /*resource "azurerm_virtual_machine" "vm" {
   name                  = "${var.prefix}-vm"
   location              = azurerm_resource_group.resource_group.location
   resource_group_name   = azurerm_resource_group.resource_group.name
@@ -40,19 +27,24 @@ resource "azurerm_virtual_machine" "vm" {
     computer_name  = "${var.prefix}-vm"
     admin_username = "adminuser"
     admin_password = "adminuser@123"
-    #custom_data = base64encode(local.custom_data)
     custom_data    = file("azure_user_data.sh")
   }
   os_profile_linux_config {
     disable_password_authentication = false
   }
+
+
+  provisioner "local-exec" {
+    command = "echo ${azurerm_mysql_server.mysql_server.fqdn} ${azurerm_mysql_server.mysql_server.administrator_login}@${azurerm_mysql_server.mysql_server.name} > dbdetails.txt"
+  }
+
   tags = {
     environment = var.environment
   }
 }
 
 resource "azurerm_public_ip" "public_ip" {
-  depends_on=[azurerm_resource_group.resource_group]
+  #depends_on=[azurerm_resource_group.resource_group]
   name                = "${var.prefix}-vm-public_ip"
   resource_group_name = azurerm_resource_group.resource_group.name
   location            = azurerm_resource_group.resource_group.location
@@ -61,4 +53,4 @@ resource "azurerm_public_ip" "public_ip" {
   tags = {
     environment = var.environment
   }
-}
+}*/
