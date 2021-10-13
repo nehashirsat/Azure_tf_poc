@@ -10,6 +10,7 @@ output "mysql_id" {
   value = azurerm_mysql_server.mysql_server.id
 }
 
+#Output For User Id
 output "mysql_user_login_id" {
   value = "${azurerm_mysql_server.mysql_server.administrator_login}@${azurerm_mysql_server.mysql_server.name}"
 }
